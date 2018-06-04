@@ -1,0 +1,33 @@
+*{
+    margin:  0;
+    padding: 0;
+}
+
+a{
+    text-decoration: none;
+}
+#kbdContainer{
+    text-align: center;
+}
+kbd{
+    border:1px solid red;
+    width: 4em;
+    height: 4em;
+    display: inline-block;
+    text-transform: uppercase;
+    text-align: center;
+    position: relative;
+}
+kbd > button{
+    position: absolute;
+    right: 3px;
+    bottom: 3px;
+    display: none;
+    font-size: 10px;
+    appearance: none;
+    border: transparent;
+}
+
+kbd:hover > button{
+   display: inline-block;
+}
