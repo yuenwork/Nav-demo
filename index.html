@@ -6,12 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="style.css">
+    <style>
+    </style>
     <title>Nav-demo</title>
 </head>
 
 <body>
     <header></header>
     <main>
+
         <div id="kbdContainer"></div>
     </main>
     <footer>
@@ -34,53 +37,91 @@
             'i': 'iqiyi.com',
             'o': 'opera.com',
             'p': undefined,
-            'a': 'acfun.tv',
+            'a': 'bilibili.com',
             's': 'sohu.com',
             'z': 'zhihu.com',
             'm': 'www.mcdonalds.com.cn'
         }
-        
-        
-        if (hashLocalstorage){
-            var hashLocalstorage = JSON.parse(localStorage.getItem('web')||'null')
-            hash = hashLocalstorage
-        }
-        index = 0;
-        while(index<keys['length']){
-            div1 = document.createElement('div')
-            kbdContainer.appendChild(div1)
-            var index2 = 0
-            while (index2<keys[index].length){
-            kbd = document.createElement('kbd')
-            
-            div1.appendChild(kbd)
-            
-            kbd.textContent=keys[index][index2]
-            btn = document.createElement('button')
-            kbd.appendChild(btn)
-            btn.textContent='编辑'
-            btn.id=keys[index][index2]
-            btn.onclick=function(e){
-            key = e.target.id
-            x = prompt("输入新网址")
-            hash[key] = x
-            localStorage.setItem('web',JSON.stringify(hash))
+
+        function createTag(tagName, attributes) {
+            var element = document.createElement(tagName)
+            for (var key in attributes) {
+                element[key] = attributes[key]
             }
-            index2 = index2 +1
-            }
-            index = index + 1
+            return element
         }
 
-        document.onkeypress=function(keypressed){
+        if (hashLocalstorage) {
+            var hashLocalstorage = JSON.parse(localStorage.getItem('web') || 'null')
+            hash = hashLocalstorage
+        }
+
+        for (var index = 0; index < keys['length']; index = index + 1) {
+            div1 = createTag('div', {
+                className: 'row'
+            })
+            kbdContainer.appendChild(div1)
+
+
+            for (var index2 = 0; index2 < keys[index].length; index2 = index2 + 1) {
+                span = createTag('span', {
+                    className: 'text',
+                    textContent: keys[index][index2]
+                })
+
+                favico = createTag('img', {})
+                
+                if (hash[keys[index][index2]]) {
+                    favico.src = 'http://' + hash[keys[index][index2]] + '/favicon.ico'
+                } else {
+                    favico.src = 'https://i.loli.net/2017/11/10/5a05afbc5e183.png'
+                }
+                favico.onerror = function (e) {
+                    e.target.src = 'https://i.loli.net/2017/11/10/5a05afbc5e183.png'
+                }
+
+                btn = createTag('button', {
+                    textContent: '编辑'
+                })
+                btn.id = keys[index][index2]
+
+                btn.onclick = function (e) {
+                    key = e.target.id
+                    btn2 = e.target
+                    favico2 = btn2.previousSibling
+                    x = prompt("输入新网址")
+                    hash[key] = x
+                    favico2.src = 'http://' + x + '/favicon.ico'
+                    favico2.onerror = function (e) {
+                        e.target.src = 'https://i.loli.net/2017/11/10/5a05afbc5e183.png'
+                    }
+                    localStorage.setItem('web', JSON.stringify(hash))
+                }
+
+
+                kbd = createTag('kbd', {
+                    className: 'key'
+                })
+
+                kbd.appendChild(span)
+                kbd.appendChild(favico)
+                kbd.appendChild(btn)
+
+                div1.appendChild(kbd)
+
+            }
+
+        }
+
+        document.onkeypress = function (keypressed) {
             key = keypressed['key'];
 
             website = hash[key];
             console.log(website)
             //location.href = 'http://'+website;
-            window.open('http://'+website,'_blank');
+            window.open('http://' + website, '_blank');
 
         }
-    
     </script>
 </body>
 
